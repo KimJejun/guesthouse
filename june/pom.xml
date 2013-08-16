@@ -224,9 +224,11 @@
 	
 	
 	<build>
+		<outputDirectory>target/${env}/classes</outputDirectory>
+		<sourceDirectory>src/main/java</sourceDirectory>
 		<resources>
 			<resource>
-				<directory>src/main/resources</directory>
+				<directory>${basedir}/src/main/resources</directory>
 			</resource>
 			<resource>
 				<directory>src/main/resources-${env}</directory>
@@ -245,6 +247,14 @@
 					</additionalBuildcommands>
 					<downloadSources>true</downloadSources>
 					<downloadJavadocs>true</downloadJavadocs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 			<plugin>
