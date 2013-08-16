@@ -31,6 +31,12 @@
 		
 		<profile>
 			<id>real</id>
+			<activation>
+				<property>
+					<name>env</name>
+					<value>real</value>
+				</property>
+			</activation>
 			<properties>
 				<env>real</env>
 				<deployDir>${basedir}/../deploy</deployDir>
