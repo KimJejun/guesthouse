@@ -250,8 +250,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.5.1</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.7</source>
+					<target>1.7</target>
 					<compilerArgument>-Xlint:all</compilerArgument>
 					<showWarnings>true</showWarnings>
 					<showDeprecation>true</showDeprecation>
@@ -263,6 +263,17 @@
 				<version>1.2.1</version>
 				<configuration>
 					<mainClass>org.test.int1.Main</mainClass>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<workDirectory>${deployDir}</workDirectory>
+					<webappDirectory>/home/reperion/deploy/guesthouse_haru</webappDirectory>
+					<outputDirectory>${basedir}/../deploy</outputDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
