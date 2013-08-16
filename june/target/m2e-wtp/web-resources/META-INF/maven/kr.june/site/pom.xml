@@ -226,8 +226,10 @@
 	<build>
 		<resources>
 			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
 				<directory>src/main/resources-${env}</directory>
-				<filtering>true</filtering>
 			</resource>
 		</resources>
 		<plugins>
@@ -273,7 +275,7 @@
 					<encoding>UTF-8</encoding>
 					<workDirectory>${deployDir}</workDirectory>
 					<webappDirectory>/home/reperion/deploy/guesthouse_haru</webappDirectory>
-					<outputDirectory>${basedir}/../deploy</outputDirectory>
+					<outputDirectory>/home/reperion/deploy/guesthouse_haru</outputDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
