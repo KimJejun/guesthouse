@@ -39,7 +39,7 @@
 			</activation>
 			<properties>
 				<env>real</env>
-				<deployDir>${basedir}/../deploy</deployDir>
+				<deployDir>${basedir}/target</deployDir>
 			</properties>
 		</profile>
 	</profiles>
@@ -230,11 +230,9 @@
 	
 	
 	<build>
-		<outputDirectory>target/${env}/classes</outputDirectory>
-		<sourceDirectory>src/main/java</sourceDirectory>
 		<resources>
 			<resource>
-				<directory>${basedir}/src/main/resources</directory>
+				<directory>src/main/resources</directory>
 			</resource>
 			<resource>
 				<directory>src/main/resources-${env}</directory>
@@ -283,6 +281,8 @@
 					<mainClass>org.test.int1.Main</mainClass>
 				</configuration>
 			</plugin>
+			<!-- 
+			 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
