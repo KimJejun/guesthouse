@@ -3,7 +3,7 @@
 <properties>
 	
 	<comment>환경설정</comment>
-	<entry key="deploy.type">dev</entry>
+	<entry key="deploy.type">real</entry>
 	<entry key="neo4j.url">http://14.63.213.165:7474/db/data/</entry>
 	
 </properties>
