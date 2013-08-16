@@ -1,0 +1,92 @@
+package kr.june.site.reserve;
+
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import kr.june.site.GuestDetailService;
+import kr.june.site.domain.Guest;
+import kr.june.site.domain.Reservation;
+import kr.june.site.domain.ReservationInfo;
+import kr.june.site.domain.Room;
+import kr.june.site.repository.ReservationRepository;
+import kr.june.site.repository.RoomRepository;
+import lombok.extern.log4j.Log4j;
+
+import org.apache.commons.collections.IteratorUtils;
+import org.apache.commons.collections.MapUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.neo4j.conversion.EndResult;
+import org.springframework.data.neo4j.support.Neo4jTemplate;
+import org.springframework.stereotype.Service;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import scala.util.parsing.json.JSONObject;
+
+@Service
+@Log4j
+public class ReservationService {
+	@Autowired private RoomRepository roomRepository;
+	@Autowired private Neo4jTemplate template;
+	@Autowired private ReservationRepository reservationRepository;
+	@Autowired private GuestDetailService guestDetailService;
+	
+	@SuppressWarnings("unchecked")
+	public List<Room> getRoomList() {
+		List<Room> list = IteratorUtils.toList(roomRepository.findAll().iterator());
+		return list;
+	}
+	
+	public String getReservations() {
+		
+		EndResult<Map<String,Object>> result = template.query("START n=node(*) MATCH (n)-[r:RESERVED]->(c) RETURN r.reservedAt, c.name, c.color as color, c.capacity as capacity, sum(r.guestCount) as guestCount order by r.reservedAt", null);
+		List<ReservationInfo> reserveList = new ArrayList<>();
+		for (Map<String, Object> map : result) {
+			log.debug(map);
+			ReservationInfo reservationInfo = new ReservationInfo();
+			String count = "(" + map.get("guestCount") + "/" + map.get("capacity") + ")";
+			reservationInfo.setTitle((String) map.get("c.name") + count);
+			reservationInfo.setStart((String) map.get("r.reservedAt"));
+			reservationInfo.setColor((String) map.get("color"));
+			reserveList.add(reservationInfo);
+		}
+		
+		Gson gson = new Gson();
+		String jsonResult = gson.toJson(reserveList);
+		log.debug(jsonResult);
+		
+		return jsonResult;
+	}
+	
+	public List<Room> getRoomReservationInfo(String date) {
+		List<Room> roomList = IteratorUtils.toList(roomRepository.findAll().iterator());
+		EndResult<Map<String,Object>> reservedInfoMap =reservationRepository.getReservation(date);
+		
+		for (Room room : roomList) {
+			String defaultRoomName = room.getName();
+			int defalutCapacity = room.getCapacity();
+			for (Map<String, Object> map : reservedInfoMap) {
+				String bookedRoomName = MapUtils.getString(map, "roomName");
+				if (defaultRoomName.equals(bookedRoomName)) {
+					int reservedCount = MapUtils.getIntValue(map, "guestCount");
+					room.setCapacity(defalutCapacity - reservedCount);
+					break;
+				}
+			}
+		}
+		return roomList;
+	}
+	
+	public Reservation reserve(Reservation reservation) {
+		Room room = roomRepository.findOne(reservation.getRoom().getNodeId());
+		Guest guest = guestDetailService.getGuestFromSession();
+		
+		reservation = guest.reserve(room, reservation.getGuestCount(), reservation.getReservedAt());
+		template.save(reservation);
+		return reservation;
+	}
+}
