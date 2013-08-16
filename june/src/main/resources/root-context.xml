@@ -3,7 +3,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:neo4j="http://www.springframework.org/schema/data/neo4j"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
 		http://www.springframework.org/schema/data/neo4j http://www.springframework.org/schema/data/neo4j/spring-neo4j-2.2.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 	
@@ -11,11 +13,13 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
+	<util:properties id="config" location="classpath:/config.xml" />
+	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<neo4j:repositories base-package="kr.june.site.repository" />
 	<neo4j:config graphDatabaseService="graphDatabaseService" />
 	<bean id="graphDatabaseService"	class="org.springframework.data.neo4j.rest.SpringRestGraphDatabase">
-		<constructor-arg index="0" value="http://10.101.16.165:7474/db/data/" />
+		<constructor-arg index="0" value="#{config['neo4j.url']}" />
 	</bean>
 	
 </beans>

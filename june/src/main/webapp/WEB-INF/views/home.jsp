@@ -28,9 +28,9 @@
           <img src="/resources/bootstrap/img/examples/slide-01.jpg" alt="">
           <div class="container">
             <div class="carousel-caption">
-              <h1>Example headline.</h1>
-              <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-              <a class="btn btn-large btn-primary" href="#">Sign up today</a>
+              <h1>GuestHouse 하루!</h1>
+              <p class="lead">내일로 성지인 순천!! 환영합니다. 순.하.게</p>
+              <a class="btn btn-large btn-primary" href="/reserve/index">예약하기</a>
             </div>
           </div>
         </div>
