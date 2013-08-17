@@ -30,6 +30,7 @@
 					<th>예약일</th>
 					<th>예약 인원</th>
 					<th>예약 상태</th>
+					<th>입금확인요청</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -40,6 +41,21 @@
 					<td>${reservation.reservedAt}</td>
 					<td>${reservation.guestCount}</td>
 					<td>${reservation.status.status}</td>
+					<td>
+						<form action="/guest/confirm" method="post" id="form">
+							<input type="hidden" name="nodeId" value="${reservation.nodeId}"> 
+						<c:choose>
+							<c:when test="${reservation.status == 'RESERVATION'}">
+								<input type="hidden" name="status" value="CONFIRM"> 
+								<button class="btn btn-small btn-success" type="submit">입금완료요청</button>
+							</c:when>
+							<c:otherwise>
+								<input type="hidden" name="status" value="CANCLE"> 
+								<button class="btn btn-small btn-danger" type="submit">예약취소</button>
+							</c:otherwise>
+						</c:choose>
+						</form>
+					</td>
 				</tr>
 				</c:forEach>
 				

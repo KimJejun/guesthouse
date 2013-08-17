@@ -30,6 +30,7 @@
             <div class="carousel-caption">
               <h1>GuestHouse 하루!</h1>
               <p class="lead">내일로 성지인 순천!! 환영합니다. 순.하.게</p>
+              <p class="lead">'하루'에는 많은 즐거운 일들이 일어납니다. 여행, 낭만, 자유와 행복을 느껴보세요.</p>
               <a class="btn btn-large btn-primary" href="/reserve/index">예약하기</a>
             </div>
           </div>
@@ -71,26 +72,37 @@
       <div class="row">
         <div class="span4">
           <img class="img-circle" data-src="holder.js/140x140">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
+          <h2>예약하기</h2>
+          <p>
+          	<span class="label label-important">Reservation</span> 메뉴로 이동하신후 원하시는 날짜에 정원이 초과되지 않았을 경우 예약 가능합니다.<br>
+          	예약후 입금 하셔야 <span class="label label-success">예약 완료</span>가 됩니다. ^^
+          </p>
+          <p><a class="btn" href="/reserve/index">예약하기.</a></p>
         </div><!-- /.span4 -->
         <div class="span4">
           <img class="img-circle" data-src="holder.js/140x140">
-          <h2>Heading</h2>
-          <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
+          <h2>이용금액</h2>
+          <p> 
+          	기본 : <span class="label label-important">24,000원</span> <br>
+          	내일로 : <span class="label label-info">20,000원</span><br>
+          	정원박람회 이용객 : <span class="label label-info">20,000원</span><br>
+          </p>
+          
         </div><!-- /.span4 -->
         <div class="span4">
           <img class="img-circle" data-src="holder.js/140x140">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
+          <h2>순.하.게 환불규칙</h2>
+          <p>
+          	<span class="label label-important">7일전 취소 : 숙박비의 100%</span><br>
+          	<span class="label label-warning">5일전 취소 : 숙박비의 50%</span><br>
+          	<span class="label label-info">3일전 취소 : 숙박비의 30%</span><br>
+          	그외의 환불은 어렵습니다. ㅠ_ㅠ
+          </p>
         </div><!-- /.span4 -->
       </div><!-- /.row -->
 
 
-      <!-- START THE FEATURETTES -->
+      <!-- START THE FEATURETTES
 
       <hr class="featurette-divider">
 
@@ -118,36 +130,13 @@
 
       <hr class="featurette-divider">
 
+       -->
       <!-- /END THE FEATURETTES -->
 
 
-      <!-- FOOTER -->
-      <footer>
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2013 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-      </footer>
 
     </div><!-- /.container -->
 
-
-
-<!--     Le javascript
-    ==================================================
-    Placed at the end of the document so the pages load faster
-    <script src="/resources/bootstrap/js/jquery.js"></script>
-    <script src="/resources/bootstrap/js/bootstrap-transition.js"></script>
-    <script src="/resources/bootstrap/js/bootstrap-alert.js"></script>
-    <script src="/resources/bootstrap/js/bootstrap-modal.js"></script>
-    <script src="/resources/bootstrap/js/bootstrap-dropdown.js"></script>
-    <script src="/resources/bootstrap/js/bootstrap-scrollspy.js"></script>
-    <script src="/resources/bootstrap/js/bootstrap-tab.js"></script>
-    <script src="/resources/bootstrap/js/bootstrap-tooltip.js"></script>
-    <script src="/resources/bootstrap/js/bootstrap-popover.js"></script>
-    <script src="/resources/bootstrap/js/bootstrap-button.js"></script>
-    <script src="/resources/bootstrap/js/bootstrap-collapse.js"></script>
-    <script src="/resources/bootstrap/js/bootstrap-carousel.js"></script>
-    <script src="/resources/bootstrap/js/bootstrap-typeahead.js"></script>
- -->    
 	<script type="text/javascript">
         $(function(){
           // carousel demo

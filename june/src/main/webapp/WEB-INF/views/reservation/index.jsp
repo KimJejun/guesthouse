@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ page session="false" %>
 <html>
 <head>
@@ -50,7 +51,12 @@ $(document).ready(function() {
 		header: {
 			left: 'prev,next today',
 			center: 'title',
-			right: 'month,agendaWeek,agendaDay'
+			right: 'month'
+		},
+		titleFormat: {
+			month: 'yyyy MMMM',
+			week: "MMM d[ yyyy]{ '&#8212;'[ MMM] d yyyy}",
+			day: 'dddd, MMM d, yyyy'
 		},
 		selectable: true,
 		selectHelper: true,
@@ -147,8 +153,18 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-	${reservations}	
 <div id='wrap'>
+	<sec:authorize access="isAnonymous()">
+	<div class="alert alert-block alert-info fade in">
+  		<button type="button" class="close" data-dismiss="alert">×</button>
+  		<h4 class="alert-heading">로그인 후 예약을 진행하실수 있습니다.</h4>
+  		<p>아래 버튼을 클릭하여 로그인 후 이용해주세요.</p>
+  		<p>
+    		<a href="/guest/loginForm" class="btn btn-warning">log in</a>
+  		</p>
+	</div>
+	</sec:authorize>
+
 	<div class="alert alert-success hide">
 		<button type="button" class="close" data-dismiss="alert">×</button>
 		<strong>예약 완료!</strong> 예약 완료 되었습니다. 입금을 진행해주세요.

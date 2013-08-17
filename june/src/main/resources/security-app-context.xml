@@ -22,6 +22,7 @@
 		<intercept-url pattern="/guest/**" access="permitAll" />
 		
 		<intercept-url pattern="/secure/**" access="isAuthenticated()"/>
+		<intercept-url pattern="/manage/**" access="hasRole('ROLE_ADMIN')"/>
 		<intercept-url pattern="/**" access="denyAll"/>
 		
 		<form-login login-page="/guest/loginForm" default-target-url="/home" />

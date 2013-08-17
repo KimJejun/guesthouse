@@ -2,6 +2,9 @@ package kr.june.site.reserve;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +13,7 @@ import kr.june.site.domain.Guest;
 import kr.june.site.domain.Reservation;
 import kr.june.site.domain.ReservationInfo;
 import kr.june.site.domain.Room;
+import kr.june.site.domain.Reservation.Status;
 import kr.june.site.repository.ReservationRepository;
 import kr.june.site.repository.RoomRepository;
 import lombok.extern.log4j.Log4j;
@@ -41,6 +45,10 @@ public class ReservationService {
 		return list;
 	}
 	
+	public Collection<Reservation> getReservationList() {
+		return reservationRepository.getReservation();
+	}
+	
 	public String getReservations() {
 		
 		EndResult<Map<String,Object>> result = template.query("START n=node(*) MATCH (n)-[r:RESERVED]->(c) RETURN r.reservedAt, c.name, c.color as color, c.capacity as capacity, sum(r.guestCount) as guestCount order by r.reservedAt", null);
@@ -49,7 +57,7 @@ public class ReservationService {
 			log.debug(map);
 			ReservationInfo reservationInfo = new ReservationInfo();
 			String count = "(" + map.get("guestCount") + "/" + map.get("capacity") + ")";
-			reservationInfo.setTitle((String) map.get("c.name") + count);
+			reservationInfo.setTitle((String) map.get("c.name") + " " + count);
 			reservationInfo.setStart((String) map.get("r.reservedAt"));
 			reservationInfo.setColor((String) map.get("color"));
 			reserveList.add(reservationInfo);
@@ -85,8 +93,30 @@ public class ReservationService {
 		Room room = roomRepository.findOne(reservation.getRoom().getNodeId());
 		Guest guest = guestDetailService.getGuestFromSession();
 		
-		reservation = guest.reserve(room, reservation.getGuestCount(), reservation.getReservedAt());
+		reservation.setRoom(room);
+		
+		reservation = guest.reserve(reservation);
 		template.save(reservation);
 		return reservation;
+	}
+	
+	/**
+	 * 예약 상태에 따라 예약 목록 가져오기
+	 * @param status
+	 * @return
+	 */
+	public Collection<Reservation> getReservationListByStaus(Reservation.Status... status) {
+		return reservationRepository.getReservationListByStatus(status);
+	}
+	
+	/**
+	 * 예약 상태를 변경
+	 * @param reservationId
+	 * @param status
+	 */
+	public void changeReservationStatus(long reservationId, Reservation.Status status) {
+		Reservation reservation = reservationRepository.findOne(reservationId);
+		reservation.setStatus(status);
+		reservationRepository.save(reservation);
 	}
 }

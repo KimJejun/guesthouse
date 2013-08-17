@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import kr.june.site.domain.Guest;
 import kr.june.site.domain.Reservation;
 import kr.june.site.domain.ReservationInfo;
 import kr.june.site.domain.Room;
+import kr.june.site.domain.Reservation.Status;
 import kr.june.site.repository.GuestRepository;
 import kr.june.site.repository.ReservationRepository;
 import kr.june.site.repository.RoomRepository;
@@ -36,7 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.gson.Gson;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:/root-context.xml")
+@ContextConfiguration({"classpath:/root-context.xml", "classpath:/security-app-context.xml"})
 @Log4j
 public class RepositoryTest {
 	@Autowired
@@ -65,6 +67,30 @@ public class RepositoryTest {
 		
 		Object jsonResult = new Gson().toJson(roomList);
 		log.debug(jsonResult);
+	}
+	
+	@Test
+	public void getReservedList() {
+		Collection<Reservation> reservations = reservationRepository.getUserReservations("dosajun");
+		for (Reservation reservation : reservations) {
+			log.info(reservation);
+		}
+	}
+	
+	@Test
+	public void getReservedListByStatus() {
+		Collection<Reservation> reservations = reservationRepository.getReservationListByStatus(Status.RESERVATION, Status.CONFIRM);
+		for (Reservation reservation : reservations) {
+			log.info(reservation);
+		}
+	}
+	
+	@Test
+	public void updateReservationStatus() {
+		Reservation reservation = reservationRepository.findOne(25L);
+		reservation.setStatus(Status.RESERVATION);
+		reservationRepository.save(reservation);
+		
 	}
 	
 }

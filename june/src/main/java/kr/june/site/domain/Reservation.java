@@ -25,17 +25,20 @@ public class Reservation {
 	private String registedAt;
 	private Status status;
 	
+	/** 입금자 **/
+	private String depositName;
+	
 	public Reservation() {
 	}
 	
-	public Reservation(Guest guest, Room room, int guestCount, String reservedAt) {
+	public Reservation(Guest guest, Room room, int guestCount, String reservedAt, String depositName) {
 		this.guest = guest;
 		this.room = room;
 		this.guestCount = guestCount;
 		this.reservedAt = reservedAt;
 		this.registedAt = DateFormatUtils.format(Calendar.getInstance(), "yyyy-MM-dd:HH-mm");
 		this.status = Status.RESERVATION;
-		
+		this.depositName = depositName;
 	}
 	
 	@Override
@@ -59,7 +62,8 @@ public class Reservation {
 	}
 	
 	public enum Status {
-		RESERVATION("예약"), CANCLE("취소"), CONFIRM("입금확인요청"), PROCESS("입금확인중"), COMPLETE("입금완료");
+		RESERVATION("예약"), BEFORE("입금전"), CONFIRM("입금확인요청"), PROCESS("입금확인중"), COMPLETE("입금확인완료"), FINISH("예약완료")
+		, CANCLE("취소");
 		
 		private String status;
 

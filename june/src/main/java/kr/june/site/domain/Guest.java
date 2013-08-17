@@ -32,10 +32,10 @@ public class Guest {
 		super();
 	}
 	
-	public Reservation reserve(Room room, int guestCount, String reservedAt) {
-		Reservation reservation = new Reservation(this, room, guestCount, reservedAt);
-		reserveList.add(reservation);
-		return reservation;
+	public Reservation reserve(Reservation reservationInfo) {
+		reservationInfo.setGuest(this);
+		reserveList.add(reservationInfo);
+		return reservationInfo;
 	}
 
 

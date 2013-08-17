@@ -1,10 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator"
-	prefix="decorator"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator"%>
 <%@ taglib uri="http://www.opensymphony.com/sitemesh/page" prefix="page"%>
-<%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -15,11 +12,9 @@
 <meta name="author" content="">
 
 <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet">
-<link href="/resources/bootstrap/css/bootstrap-responsive.css"
-	rel="stylesheet">
+<link href="/resources/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 <link href="/resources/css/base.css" rel="stylesheet">
-<link href='/resources/css/redmond/jquery-ui-1.10.3.custom.min.css'
-	rel='stylesheet' />
+<link href='/resources/css/redmond/jquery-ui-1.10.3.custom.min.css' rel='stylesheet' />
 <script src='/resources/js/jquery-2.0.3.min.js'></script>
 <script src='/resources/js/jquery-ui-1.10.3.custom.min.js'></script>
 <script src='/resources/bootstrap/js/bootstrap.min.js'></script>
@@ -271,7 +266,7 @@ body {
 						<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 							class="icon-bar"></span>
 					</button>
-					<a class="brand" href="#">Guesthouse 하루</a>
+					<a class="brand" href="/home">Guesthouse 하루</a>
 					<!-- Responsive Navbar Part 2: Place all navbar contents you want collapsed withing .navbar-collapse.collapse. -->
 					<div class="nav-collapse collapse">
 						<ul class="nav" id="gnb_nav">
@@ -281,32 +276,31 @@ body {
 							<li><a href="#contact">Contact</a></li>
 							<li><a href="#contact">Guest Book</a></li>
 							<!-- Read about Bootstrap dropdowns at http://twbs.github.com/bootstrap/javascript.html#dropdowns -->
-							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-								<ul class="dropdown-menu">
-									<li><a href="#">Action</a></li>
-									<li><a href="#">Another action</a></li>
-									<li><a href="#">Something else here</a></li>
-									<li class="divider"></li>
-									<li class="nav-header">Nav header</li>
-									<li><a href="#">Separated link</a></li>
-									<li><a href="#">One more separated link</a></li>
-								</ul>
-							</li>
 							<sec:authorize access="isAuthenticated()">
-								<li>
-									<a href="/logout">log out</a>
-								</li>
-								<li>
-									<a href="/guest/myReservations">내 메뉴</a>							
-								</li>
-							</sec:authorize>
-							<sec:authorize access="isAnonymous()">
-								<li>
-									<a href="/guest/loginForm">log in</a>
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown">내 메뉴<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+										<li><a href="/guest/myReservations">예약목록</a></li>
+										<li><a href="/logout">log out</a></li>
+									</ul>
 								</li>
 							</sec:authorize>
 							<sec:authorize access="hasRole('ROLE_ADMIN')">
-								<li><a href="/guest/loginForm">admin</a></li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">관리메뉴<b class="caret"></b></a>
+								<ul class="dropdown-menu">
+									<li><a href="#">회원관리</a></li>
+									<li id="li_admin_confirmList"><a href="/manage/reservationList">예약목록</a></li>
+									<li id="li_admin_confirmList"><a href="/manage/confirmList?status=CONFIRM&status=COMPLETE">입금관리</a></li>
+									<li><a href="#">방 관리</a></li>
+									<li class="divider"></li>
+									<li><a href="#">공지관리</a></li>
+									<li><a href="#">기타관리</a></li>
+								</ul>
+							</li>
+							</sec:authorize>
+							<sec:authorize access="isAnonymous()">
+								<li><a href="/guest/loginForm">log in</a></li>
 							</sec:authorize>
 						</ul>
 					</div>
@@ -321,6 +315,12 @@ body {
 	</div>
 	<div class="body_wrapper">
 		<decorator:body />
+	</div>
+	<div class="footer" align="center">
+      <footer>
+        <p>&copy; 2013 Company, Inc. &middot; 전라남도 순천시 영동 42번지 "순천 하루 게스트하우스"</p>
+      </footer>
+		
 	</div>
 </body>
 </html>

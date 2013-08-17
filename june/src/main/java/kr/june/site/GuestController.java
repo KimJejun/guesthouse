@@ -1,6 +1,10 @@
 package kr.june.site;
 
+import javax.security.sasl.AuthenticationException;
+
 import kr.june.site.domain.Guest;
+import kr.june.site.domain.Reservation.Status;
+import kr.june.site.reserve.ReservationService;
 import kr.june.site.service.GuestService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +53,11 @@ public class GuestController {
 	public String myReservations(Model model) {
 		model.addAttribute("reservations", service.getMyReservations());
 		return "/guest/myReservations";
+	}
+	
+	@RequestMapping("/confirm")
+	public String confirm(Model model, long nodeId, Status status) throws AuthenticationException {
+		service.updateReservationStatus(nodeId, status);
+		return "redirect:/guest/myReservations";
 	}
 }

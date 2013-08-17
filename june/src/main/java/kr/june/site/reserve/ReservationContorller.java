@@ -43,6 +43,11 @@ public class ReservationContorller {
 	@RequestMapping("/reserve")
 	public String reserve(Reservation reservation) {
 		reservationService.reserve(reservation);
+		return "redirect:/reserve/index?success=true";
+	}
+	
+	@RequestMapping("/updatereservationStatus")
+	public String updateReservationStatus() {
 		
 		return "redirect:/reserve/index?success=true";
 	}

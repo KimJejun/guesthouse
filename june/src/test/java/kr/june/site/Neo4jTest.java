@@ -10,6 +10,7 @@ import java.util.Map;
 
 import kr.june.site.domain.Guest;
 import kr.june.site.domain.Reservation;
+import kr.june.site.domain.Reservation.Status;
 import kr.june.site.domain.ReservationInfo;
 import kr.june.site.domain.Room;
 import kr.june.site.repository.GuestRepository;
@@ -59,18 +60,18 @@ public class Neo4jTest {
 	
 	@Test
 	public void makeRoom() {
-		Room forrestGump = template.save(new Room("10번방", 10, "RED"));
-		template.save(new Room("8번방-1", 8, "GREEN"));
-		template.save(new Room("8번방-2", 8, "BLUE"));
-		Room retrievedMovie = template.findOne(forrestGump.getNodeId(), Room.class);
+		Room room8 = template.save(new Room("8인실", 10, "RED"));
+		template.save(new Room("6인실-1", 8, "GREEN"));
+		template.save(new Room("6인실-2", 8, "BLUE"));
+		Room retrievedRoom8 = template.findOne(room8.getNodeId(), Room.class);
 		    
-		assertEquals("retrieved movie matches persisted one", forrestGump, retrievedMovie);
-		assertEquals("retrieved movie title matches", "10번방", retrievedMovie.getName());
+		assertEquals("retrieved movie matches persisted one", room8, retrievedRoom8);
+		assertEquals("retrieved movie title matches", "8인실", retrievedRoom8.getName());
 	}
 	
 	@Test
 	public void deleteRoom() {
-		Room room8 = repository.findByPropertyValue("name", "8번당");
+		Room room8 = repository.findByPropertyValue("name", "8인실");
 		
 		repository.delete(room8);
 	}
@@ -89,16 +90,17 @@ public class Neo4jTest {
 	
 	@Test
 	public void makeGuest() {
-		guestDetailService.register(new Guest("lion", "김리온", "lion", "lion@gmail.com", "010-4100-3120", Guest.Roles.ROLE_USER));
+		guestDetailService.register(new Guest("admin", "운영자", "admin", "admin@gmail.com", "010-4199-3120", Guest.Roles.ROLE_ADMIN, Guest.Roles.ROLE_USER));
 		guestDetailService.register(new Guest("dosajun", "김제준", "dosajun", "dosajun@gmail.com", "010-4199-3120", Guest.Roles.ROLE_ADMIN, Guest.Roles.ROLE_USER));
+		guestDetailService.register(new Guest("lion", "김리온", "lion", "lion@gmail.com", "010-4100-3120", Guest.Roles.ROLE_USER));
 		guestDetailService.register(new Guest("dosajun2", "김제준2", "dosajun2", "dosajun2@gmail.com", "010-4199-31202", Guest.Roles.ROLE_USER));
 	}
 	
 	@Test
 	public void test2() {
-		Room room8 = repository.findByPropertyValue("name", "8번방");
+		Room room8 = repository.findByPropertyValue("name", "8인실");
 		
-		assertEquals("retrieved movie matches persisted one", room8.getName(), "8번방");
+		assertEquals("retrieved movie matches persisted one", room8.getName(), "8인실");
 		
 		//repository.delete((long) 1);
 	}
@@ -115,17 +117,20 @@ public class Neo4jTest {
 	@Transactional
 	@Rollback(false)
 	public void reserve() {
-		Room room8 = repository.findByPropertyValue("name", "8번방-1");
-		Room room10 = repository.findByPropertyValue("name", "10번방");
+		Room room6_1 = repository.findByPropertyValue("name", "6인실-1");
+		Room room8 = repository.findByPropertyValue("name", "8인실");
 		Guest guest = guestRepository.findByPropertyValue("name", "김제준");
 		Guest guest2 = guestRepository.findByPropertyValue("name", "김리온");
 		
-		guest.reserve(room10, 2, DateFormatUtils.format(Calendar.getInstance(), "yyyy-MM-dd"));
-		guest.reserve(room8, 1, "2013-08-11");
+		
+		guest.reserve(new Reservation(guest, room8, 2, DateFormatUtils.format(Calendar.getInstance(), "yyyy-MM-dd"), "김제준"));
+		guest.reserve(new Reservation(guest, room6_1, 1, DateFormatUtils.format(Calendar.getInstance(), "yyyy-MM-dd"), "김제준"));
 		template.save(guest);
 		
-		guest2.reserve(room8, 3, DateFormatUtils.format(Calendar.getInstance(), "yyyy-MM-dd"));
-		guest2.reserve(room8, 2, "2013-08-12");
+		
+		
+		guest2.reserve(new Reservation(guest2, room6_1, 3, DateFormatUtils.format(Calendar.getInstance(), "yyyy-MM-dd"), "김리온"));
+		guest2.reserve(new Reservation(guest2, room6_1, 2, "2013-08-12", "김리온"));
 		template.save(guest2);
 		
 
@@ -149,10 +154,10 @@ public class Neo4jTest {
 		guest2.reserve(room8, 2, "20130812");
 		template.save(guest2);
 		*/
-		
+		/*
 		Reservation reservation = guest.reserve(room8, 3, "2013-08-20");
 		template.save(reservation);
-		
+		*/
 		//template.createRelationshipBetween(guest, room8, new Reservation(guest, room8, 5, "20130812").getClass(), "RESERVED", true);
 	}
 	
@@ -203,14 +208,5 @@ public class Neo4jTest {
 		log.debug(DateFormatUtils.format(calendar, "yyyyMMdd"));
 		log.debug(DateFormatUtils.format(Calendar.getInstance(), "yyyyMMdd HHmm"));
 	}
-	
-	@Test
-	public void getReservedList() {
-		Collection<Reservation> reservations = reservationRepository.getUserReservations("dosajun");
-		for (Reservation reservation : reservations) {
-			log.info(reservation);
-		}
-	}
-	
 	
 }
