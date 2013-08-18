@@ -28,10 +28,16 @@ public class ReservationContorller {
 	public String index(Model model, boolean success) {
 		model.addAttribute("roomList", reservationService.getRoomList());
 		model.addAttribute("reservation", new  Reservation());
-		model.addAttribute("reservations", reservationService.getReservations());
+		model.addAttribute("reservations", reservationService.getReservations(null));
 		model.addAttribute("user", guestDetailService.getGuestFromSession());
 		model.addAttribute("success", success);
 		return "/reservation/index";
+	}
+	
+	@RequestMapping("/list")
+	@ResponseBody
+	public String reservationlist(String startDate) {
+		return reservationService.getReservations(startDate);
 	}
 	
 	@RequestMapping("/roomInfo")

@@ -1,10 +1,15 @@
 package kr.june.site.reserve;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,10 +25,13 @@ import lombok.extern.log4j.Log4j;
 
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.conversion.EndResult;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -49,9 +57,10 @@ public class ReservationService {
 		return reservationRepository.getReservation();
 	}
 	
-	public String getReservations() {
-		
-		EndResult<Map<String,Object>> result = template.query("START n=node(*) MATCH (n)-[r:RESERVED]->(c) RETURN r.reservedAt, c.name, c.color as color, c.capacity as capacity, sum(r.guestCount) as guestCount order by r.reservedAt", null);
+	public String getReservations(String startDate) {
+		EndResult<Map<String,Object>> result = template.query("START n=node(*) MATCH (n)-[r:RESERVED]->(c) "
+				+ "WHERE r.reservedAt >= {startDate} AND r.reservedAt <= {endDate} "
+				+ "RETURN r.reservedAt, c.name, c.color as color, c.capacity as capacity, sum(r.guestCount) as guestCount order by r.reservedAt", getDateRange(startDate));
 		List<ReservationInfo> reserveList = new ArrayList<>();
 		for (Map<String, Object> map : result) {
 			log.debug(map);
@@ -118,5 +127,28 @@ public class ReservationService {
 		Reservation reservation = reservationRepository.findOne(reservationId);
 		reservation.setStatus(status);
 		reservationRepository.save(reservation);
+	}
+	
+	private Map<String, Object> getDateRange(String startDate) {
+		Calendar cal = Calendar.getInstance();
+		if (startDate == null) {
+			cal.setTime(new Date());
+			startDate = new SimpleDateFormat("yyyy-MM").format(new Date());
+		}
+		Map<String, Object> params = new HashMap<>();
+		
+		String newStartDate = startDate + "-01";
+		try {
+			cal.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(newStartDate));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		String endDate = startDate + "-" + String.valueOf(cal.getMaximum(Calendar.DATE));
+		
+		params.put("startDate", newStartDate);
+		params.put("endDate", endDate);
+		
+		
+		return params;
 	}
 }

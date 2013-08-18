@@ -90,7 +90,21 @@ $(document).ready(function() {
 		eventResizeStop: function(event, jsEvent, ui, view) {
 			console.log(event, jsEvent, ui, view);
 		},
-		events : events
+		viewRender : function(view, element) {
+			var d = $('#calendar').fullCalendar('getDate');
+			var month = (d.getMonth() + 1);
+			if (month < 10) {
+				month = "0" + month;
+			}
+			var date = d.getDate();
+			if (date < 10) {
+				date = "0" + date;
+			}
+			var date = d.getFullYear() + "-" + month;
+			
+			$('#calendar').fullCalendar( 'removeEventSource',  '/reserve/list?startDate=' + date );
+			$('#calendar').fullCalendar( 'addEventSource', '/reserve/list?startDate=' + date );
+		}
 	});
 	
 	function openReservationDialog(date) {
@@ -167,7 +181,7 @@ $(document).ready(function() {
 
 	<div class="alert alert-success hide">
 		<button type="button" class="close" data-dismiss="alert">×</button>
-		<strong>예약 완료!</strong> 예약 완료 되었습니다. 입금을 진행해주세요.
+		<strong>예약 완료!</strong> 예약 완료 되었습니다. <span class="label label-important">내 메뉴 > 예약 목록</span> 입금을 진행해주세요.
 	</div>
 	<div id='calendar'></div>
 

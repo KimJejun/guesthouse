@@ -2,10 +2,12 @@ package kr.june.site;
 
 import static org.junit.Assert.assertEquals;
 
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -90,6 +92,19 @@ public class RepositoryTest {
 		Reservation reservation = reservationRepository.findOne(25L);
 		reservation.setStatus(Status.RESERVATION);
 		reservationRepository.save(reservation);
+		
+	}
+	
+	@Test
+	public void dateTest() throws ParseException {
+		String startDate = "2013-08"+ "-01";
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(startDate));
+		
+		
+		cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DATE));
+		log.info(cal.getActualMinimum(Calendar.DATE));
 		
 	}
 	
