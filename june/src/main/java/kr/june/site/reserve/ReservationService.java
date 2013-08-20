@@ -102,6 +102,12 @@ public class ReservationService {
 		Room room = roomRepository.findOne(reservation.getRoom().getNodeId());
 		Guest guest = guestDetailService.getGuestFromSession();
 		
+		Reservation existReservation = reservationRepository.findByReserveAtAndUser(reservation.getReservedAt(), guest.getId());
+		if (existReservation != null) {
+			throw new RuntimeException("이미 예약을 등록한 날입니다.");
+		}
+		
+		reservation.setStatus(Status.RESERVATION);
 		reservation.setRoom(room);
 		
 		reservation = guest.reserve(reservation);

@@ -20,5 +20,8 @@ public interface ReservationRepository extends GraphRepository<Reservation> {
 	public Collection<Reservation> getUserReservations(String userId); 
 	
 	@Query("START n = node(*) MATCH (n)-[r:RESERVED]->() WHERE r.status IN {0} RETURN r")
-	public Collection<Reservation> getReservationListByStatus(Reservation.Status... status); 
+	public Collection<Reservation> getReservationListByStatus(Reservation.Status... status);
+	
+	@Query("START r = rel(*) MATCH (n)-[r]->() WHERE type(r) = 'RESERVED' AND r.reservedAt = {0} AND n.id? = {1} return r;")
+	public Reservation findByReserveAtAndUser(String reservedAt, String guestId);
 }

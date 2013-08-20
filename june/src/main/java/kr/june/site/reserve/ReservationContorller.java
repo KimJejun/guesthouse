@@ -48,7 +48,11 @@ public class ReservationContorller {
 	
 	@RequestMapping("/reserve")
 	public String reserve(Reservation reservation) {
-		reservationService.reserve(reservation);
+		try {
+			reservationService.reserve(reservation);
+		} catch(Exception ex) {
+			return "redirect:/reserve/index?success=false";
+		}
 		return "redirect:/reserve/index?success=true";
 	}
 	

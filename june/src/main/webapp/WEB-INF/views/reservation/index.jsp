@@ -28,24 +28,22 @@
 	#wrap { width: 1100px;margin: 0 auto; }
 		
 
-	#calendar {	width: 900px;}
+	#calendar {	width: 750px;}
 	.room1 {background-color: red}
 	.room2 {background-color: blue}
 	.room3 {background-color: green}
 </style>
-<script src='/resources/js/plugin/fullcalendar/fullcalendar.min.js'></script>
+<script src='/resources/js/plugin/fullcalendar/fullcalendar.min.js' type="text/javascript"></script>
+<script src='/resources/js/plugin/noty/jquery.noty.js' type="text/javascript"></script>
+<script src='/resources/js/plugin/noty/center.js' type="text/javascript"></script>
+<script src='/resources/js/plugin/noty/default.js' type="text/javascript"></script>
 <script>
 
 $(document).ready(function() {
 	
 	$('#gnb_nav li').removeClass('active').eq(1).addClass('active');
 	
-	var events = ${reservations};
-	var selectedDate;
-	
-	if (${success}) {
-		$(".alert").show();
-	}
+	var selectedDate, today = new Date();
 	
 	var calendar = $('#calendar').fullCalendar({
 		header: {
@@ -70,25 +68,19 @@ $(document).ready(function() {
 				date = "0" + date;
 			}
 			var date = start.getFullYear() + "-" + month + "-" + date;
-			openReservationDialog(date);
-			/*
-			if (title) {
-				calendar.fullCalendar('renderEvent',
-					{
-						title: title,
-						start: start,
-						end: end,
-						allDay: allDay
-					},
-					true // make the event "stick"
-				);
+			
+			
+			if (canReservation(today, start)) {
+				openReservationDialog(date);
+			} else {
+				var n = noty({text: '이전날은 예약 불가능합니다.', layout: 'center', timeout: 500, modal: true, force: false
+					, type: 'information'});
 			}
-			calendar.fullCalendar('unselect');
-			*/
+
 		},
 		editable: true,
 		eventResizeStop: function(event, jsEvent, ui, view) {
-			console.log(event, jsEvent, ui, view);
+			//console.log(event, jsEvent, ui, view);
 		},
 		viewRender : function(view, element) {
 			var d = $('#calendar').fullCalendar('getDate');
@@ -111,7 +103,18 @@ $(document).ready(function() {
 		selectedDate = date;
 		var user = "${user.name}";
 		if (user == null || user.length == 0) {
-			alert('로그인후 이용하실 수 있습니다.');
+			var n = noty({text: '로그인후 이용하실 수 있습니다.', layout: 'center', timeout: false, modal: true, force: false
+				, type: 'information'
+				, buttons: [
+				            {addClass: 'btn btn-mini btn-success', text: '로그인', onClick: function($noty) {
+				            	 location.replace('/guest/loginForm');
+				              }
+				            },
+				            {addClass: 'btn btn-mini', text: '취소', onClick: function($noty) {
+				                $noty.close();
+				              }
+				            }
+				          ]});
 			return;
 		} 
 		$('#reservedAt').val(date);
@@ -161,6 +164,15 @@ $(document).ready(function() {
 		return true;
 	});
 
+	function canReservation(today, selectedDay) {
+		today = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
+		selectedDay.setFullYear(selectedDay.getFullYear(), selectedDay.getMonth(), selectedDay.getDate());
+		
+		console.log(today, selectedDay);
+		
+		if (today <= selectedDay) return true;
+		else return false;
+	}
 	
 });
 
@@ -178,11 +190,22 @@ $(document).ready(function() {
   		</p>
 	</div>
 	</sec:authorize>
-
-	<div class="alert alert-success hide">
-		<button type="button" class="close" data-dismiss="alert">×</button>
-		<strong>예약 완료!</strong> 예약 완료 되었습니다. <span class="label label-important">내 메뉴 > 예약 목록</span> 입금을 진행해주세요.
-	</div>
+	
+	<c:choose>
+		<c:when test="${success}">
+			<div class="alert alert-success">
+				<button type="button" class="close" data-dismiss="alert">×</button>
+				<strong>예약 완료!</strong> 예약 완료 되었습니다. <span class="label label-important">내 메뉴 > 예약 목록</span> 입금을 진행해주세요.
+			</div>
+		</c:when>
+		<c:otherwise>
+			<div class="alert alert-error">
+				<button type="button" class="close" data-dismiss="alert">×</button>
+				<strong>예약 실패!</strong> 이미 같은날 예약을 진행하신경우 예약 중복 예약 하실수 없습니다. 관리자에게 문의해주세요.
+			</div>
+		</c:otherwise>
+	</c:choose>
+	
 	<div id='calendar'></div>
 
 	<div id="dialog-form" title="예약 하기" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -205,8 +228,8 @@ $(document).ready(function() {
 	  		</fieldset>
 	  	</div>
 	 	<div class="modal-footer">
+	    	<button class="btn btn-success" type="submit">예약</button>
 	    	<button class="btn" data-dismiss="modal" aria-hidden="true">닫기</button>
-	    	<button class="btn btn-primary" type="submit">예약</button>
 	  	</div>
 	  	</form:form>
 	</div>
