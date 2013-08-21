@@ -289,10 +289,10 @@ body {
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">관리메뉴<b class="caret"></b></a>
 								<ul class="dropdown-menu">
-									<li><a href="#">회원관리</a></li>
+									<li><a href="/manage/guestList">회원관리</a></li>
 									<li id="li_admin_confirmList"><a href="/manage/reservationList">예약목록</a></li>
 									<li id="li_admin_confirmList"><a href="/manage/confirmList?status=CONFIRM&status=COMPLETE">입금관리</a></li>
-									<li><a href="#">방 관리</a></li>
+									<li><a href="/manage/roomList">방 관리</a></li>
 									<li class="divider"></li>
 									<li><a href="#">공지관리</a></li>
 									<li><a href="#">기타관리</a></li>
@@ -320,7 +320,15 @@ body {
       <footer>
         <p>&copy; 2013 Company, Inc. &middot; 전라남도 순천시 영동 42번지 "순천 하루 게스트하우스"</p>
       </footer>
-		
+		<script type="text/javascript"><!--
+			google_ad_client = "ca-pub-7186362327091580";
+			/* guesthose */
+			google_ad_slot = "6527223600";
+			google_ad_width = 728;
+			google_ad_height = 90;
+			//-->
+		</script>
+		<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
 	</div>
 </body>
 </html>

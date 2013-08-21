@@ -2,8 +2,12 @@ package kr.june.site.domain;
 
 import java.util.Set;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
 import lombok.Data;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.Indexed;
@@ -18,8 +22,12 @@ public class Room {
 	@GraphId
 	Long nodeId;
 	@Indexed(indexType = IndexType.FULLTEXT, indexName = "roomName", unique = true)
+	@NotBlank
 	private String name;
+	@Max(10)
+	@Min(1)
 	private int capacity;
+	@NotBlank
 	private String color;
 	@RelatedTo(elementClass = Guest.class, type = "BOOKED", direction = Direction.BOTH)
 	Set<Guest> reserveList;

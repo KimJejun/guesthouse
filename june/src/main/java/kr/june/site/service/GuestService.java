@@ -1,6 +1,8 @@
 package kr.june.site.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.security.sasl.AuthenticationException;
 
@@ -15,6 +17,7 @@ import kr.june.site.reserve.ReservationService;
 import lombok.extern.log4j.Log4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.neo4j.conversion.EndResult;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,6 +41,10 @@ public class GuestService {
 	
 	public void regist(Guest guest) {
 		guestService.register(guest);
+	}
+	
+	public List<Guest> getGuestList() {
+		return guestRepository.findAll().as(List.class);
 	}
 	
 	public Collection<Reservation> getMyReservations() {

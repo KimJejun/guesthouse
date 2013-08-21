@@ -4,10 +4,8 @@ package kr.june.site.reserve;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,28 +14,21 @@ import java.util.Map;
 import kr.june.site.GuestDetailService;
 import kr.june.site.domain.Guest;
 import kr.june.site.domain.Reservation;
+import kr.june.site.domain.Reservation.Status;
 import kr.june.site.domain.ReservationInfo;
 import kr.june.site.domain.Room;
-import kr.june.site.domain.Reservation.Status;
 import kr.june.site.repository.ReservationRepository;
 import kr.june.site.repository.RoomRepository;
 import lombok.extern.log4j.Log4j;
 
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang.time.DateFormatUtils;
-import org.apache.commons.lang.time.DateUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.conversion.EndResult;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import scala.util.parsing.json.JSONObject;
 
 @Service
 @Log4j
@@ -47,10 +38,8 @@ public class ReservationService {
 	@Autowired private ReservationRepository reservationRepository;
 	@Autowired private GuestDetailService guestDetailService;
 	
-	@SuppressWarnings("unchecked")
 	public List<Room> getRoomList() {
-		List<Room> list = IteratorUtils.toList(roomRepository.findAll().iterator());
-		return list;
+		return roomRepository.findAll().as(List.class);
 	}
 	
 	public Collection<Reservation> getReservationList() {

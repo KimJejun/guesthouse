@@ -191,20 +191,19 @@ $(document).ready(function() {
 	</div>
 	</sec:authorize>
 	
-	<c:choose>
-		<c:when test="${success}">
-			<div class="alert alert-success">
-				<button type="button" class="close" data-dismiss="alert">×</button>
-				<strong>예약 완료!</strong> 예약 완료 되었습니다. <span class="label label-important">내 메뉴 > 예약 목록</span> 입금을 진행해주세요.
-			</div>
-		</c:when>
-		<c:otherwise>
-			<div class="alert alert-error">
-				<button type="button" class="close" data-dismiss="alert">×</button>
-				<strong>예약 실패!</strong> 이미 같은날 예약을 진행하신경우 예약 중복 예약 하실수 없습니다. 관리자에게 문의해주세요.
-			</div>
-		</c:otherwise>
-	</c:choose>
+	<c:if test="${success}">
+		<div class="alert alert-success">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			<strong>예약 완료!</strong> 예약 완료 되었습니다. <span class="label label-important">내 메뉴 > 예약 목록</span> 입금을 진행해주세요.
+		</div>
+	</c:if>
+	
+	<c:if test="${isDupleReserve}">
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			<strong>예약 실패!</strong> 이미 같은날 예약을 진행하신경우 예약 중복 예약 하실수 없습니다. 관리자에게 문의해주세요.
+		</div>
+	</c:if>
 	
 	<div id='calendar'></div>
 

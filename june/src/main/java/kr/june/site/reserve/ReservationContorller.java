@@ -25,12 +25,13 @@ public class ReservationContorller {
 	@Autowired private GuestDetailService guestDetailService;
 
 	@RequestMapping("/index")
-	public String index(Model model, boolean success) {
+	public String index(Model model, boolean success, boolean isDupleReserve) {
 		model.addAttribute("roomList", reservationService.getRoomList());
 		model.addAttribute("reservation", new  Reservation());
 		model.addAttribute("reservations", reservationService.getReservations(null));
 		model.addAttribute("user", guestDetailService.getGuestFromSession());
 		model.addAttribute("success", success);
+		model.addAttribute("isDupleReserve", isDupleReserve);
 		return "/reservation/index";
 	}
 	
@@ -51,9 +52,9 @@ public class ReservationContorller {
 		try {
 			reservationService.reserve(reservation);
 		} catch(Exception ex) {
-			return "redirect:/reserve/index?success=false";
+			return "redirect:/reserve/index?isDupleReserve=true";
 		}
-		return "redirect:/reserve/index?success=true";
+		return "redirect:/reserve/index?isDupleReserve=false";
 	}
 	
 	@RequestMapping("/updatereservationStatus")
